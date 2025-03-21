@@ -1,10 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import reactLogo from "./assets/react.svg";
+import viteLogo from "/vite.svg";
+import "./App.css";
+import client from "./socket-client";
+
+client.connect("/ws");
+
+client.onMessage((data) => {
+  console.log("got message", data);
+});
+
+client.connect("/ws/u1");
+
+client.onMessage<{ result: number[] }>((data) => {
+  console.log("got stat", data);
+});
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -29,7 +44,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
