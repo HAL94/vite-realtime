@@ -41,6 +41,10 @@ class WebsocketClient {
     }
   }
 
+  close() {
+    this.ws?.close();
+  }
+
   onMessage<T = string>(
     callback: (data: T, ...args: any[]) => Promise<void> | void
   ) {
@@ -50,12 +54,16 @@ class WebsocketClient {
     }
 
     this.ws.onmessage = (event: MessageEvent) => {
-      const data = JSON.parse(event.data) as T;
-      callback(data);
+      try {        
+        const data = JSON.parse(event.data) as T;
+        callback(data);
+      } catch (error) {
+        callback(event.data);
+      }
     };
   }
 
-  send<T extends Record<string, any>>(data: T) {
+  send<T = any>(data: T) {
     if (!this.ws) {
       console.error("WebSocket is not connected. Call connect() first.");
       return;
@@ -65,6 +73,73 @@ class WebsocketClient {
   }
 }
 
+class WebsocketConnectionManager {
+  private connections: Map<string, WebsocketClient> = new Map();
 
+  private connect(
+    url: ConnectionParams["url"],
+    onOpen?: ConnectionParams["onOpen"],
+    onClose?: ConnectionParams["onClose"]
+  ): WebsocketClient {
+    if (this.connections.has(url)) {
+      console.warn(`Connection to '${url}' already exists.`);
+      return this.connections.get(url)!;
+    }
 
-export default new WebsocketClient();
+    const client = new WebsocketClient();
+    client.connect(url, onOpen, onClose);
+    this.connections.set(url, client);
+    return client;
+  }
+
+  private getClient(url: ConnectionParams["url"]) {
+    let client = this.getConnection(url);
+    if (!client) {
+      client = this.connect(url);
+    }
+    return client;
+  }
+
+  getConnection(url: string): WebsocketClient | undefined {
+    return this.connections.get(url);
+  }
+
+  disconnect(url: string): void {
+    const client = this.connections.get(url);
+    if (client) {
+      client.close();
+      this.connections.delete(url);
+    }
+  }
+
+  disconnectAll(): void {
+    this.connections.forEach((client) => client.close());
+    this.connections.clear();
+  }
+
+  onMessage<T = any>(
+    url: ConnectionParams["url"],
+    callback: (data: T) => Promise<void> | void
+  ): void {
+    try {
+      const client = this.getClient(url);
+      client.onMessage(callback);
+    } catch (error) {
+      console.error(`Error onMessage for ${url}`, error);
+    }
+  }
+
+  send<T = any>(
+    url: ConnectionParams["url"],
+    data: T
+  ): void {
+    try {
+      const client = this.getClient(url);
+      client.send(data);
+    } catch (error) {
+      console.error(`Error send for ${url}`, error);
+    }
+  }
+}
+
+export default new WebsocketConnectionManager();

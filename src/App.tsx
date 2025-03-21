@@ -1,50 +1,30 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
 import client from "./socket-client";
+import './App.css';
 
-client.connect("/ws");
 
-client.onMessage((data) => {
-  console.log("got message", data);
-});
-
-client.connect("/ws/u1");
-
-client.onMessage<{ result: number[] }>((data) => {
+client.onMessage<{ result: number[] }>("/ws/u1", (data) => {
   console.log("got stat", data);
 });
 
-function App() {
-  const [count, setCount] = useState(0);
+function App() {  
+  const [value, setValue] = useState<string | undefined>(undefined)
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    client.onMessage("/ws", (data) => {
+      console.log("got message", data);
+    });
+  }, []);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+  return <div>
+    <label>Score</label>
+    <input value={value} onChange={(event) => setValue(event?.target.value)}/>
+    <button onClick={() => {
+      if (value) {
+        client.send('/ws', parseFloat(value))
+      }
+    }}>Submit Score</button>
+  </div>;
 }
 
 export default App;
