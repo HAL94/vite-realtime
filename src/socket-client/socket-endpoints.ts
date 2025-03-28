@@ -1,6 +1,6 @@
 
-export type Home = '/ws';
-export type Stat = '/ws/u1';
+export type Home = '/';
+export type Stat = '/u1';
 
 type SocketEndpoints = Home | Stat;
 export default SocketEndpoints;
