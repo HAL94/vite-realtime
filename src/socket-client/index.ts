@@ -1,5 +1,5 @@
 import SocketEndpoints from "./socket-endpoints";
-const URL = "ws://localhost:8000";
+const URL = "ws://localhost:8000/ws/v1";
 
 type ConnectionParams = {
   url: SocketEndpoints;
