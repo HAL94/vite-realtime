@@ -5,9 +5,9 @@ import useGetMessage from "./socket-client/use-get-message";
 
 function App() {
   const [value, setValue] = useState<string | undefined>(undefined);
-  const { data: message } = useGetMessage<string>("/");
+  // const { data: message } = useGetMessage<string>("/");
   const { data: scores } = useGetMessage<{ result: number[] }>("/u1");  
-  console.log("message from ws", message);
+  // console.log("message from ws", message);
 
   return (
     <div>

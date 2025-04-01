@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import SocketEndpoints from "./socket-endpoints";
 import client from ".";
 
-export default function useSendMessage<T = object>(
+export default function useSendMessage<T>(
   endpoint: SocketEndpoints,
   data: T,
   config: {
