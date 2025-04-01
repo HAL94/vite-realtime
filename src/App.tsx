@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import client from "./socket-client";
 import "./App.css";
-import useGetMessage from "./socket-client/use-get-message";
+// import useGetMessage from "./socket-client/use-get-message";
+import LoginForm from "./forms/login";
+import API from "./api-client";
+import { GET } from "./api-client/helpers";
 
 function App() {
   const [value, setValue] = useState<string | undefined>(undefined);
-  // const { data: message } = useGetMessage<string>("/");
-  const { data: scores } = useGetMessage<{ result: number[] }>("/u1");  
-  // console.log("message from ws", message);
+  // const { data: scores } = useGetMessage<{ result: number[] }>("/u1");
+
+  useEffect(() => {
+    API.get(GET("/auth/me"))
+      .then(() => {})
+      .catch(() => {});
+  }, []);
 
   return (
     <div>
@@ -26,9 +33,10 @@ function App() {
         Submit Score
       </button>
       <div className="flex gap-4 justify-center items-center container">
-        {scores &&
-          scores.result.map((score, index) => <span key={index}>{score}</span>)}
+        {/* {scores &&
+          scores.result.map((score, index) => <span key={index}>{score}</span>)} */}
       </div>
+      <LoginForm onSubmit={(data) => console.log("got data", data)} />
     </div>
   );
 }

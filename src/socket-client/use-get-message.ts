@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SocketEndpoints from "./socket-endpoints";
+import SocketEndpoints from "./helpers";
 import client from ".";
 
 export default function useGetMessage<T>(

@@ -1,4 +1,4 @@
-import SocketEndpoints from "./socket-endpoints";
+import SocketEndpoints from "./helpers";
 const URL = "ws://localhost:8000/ws/v1";
 
 type ConnectionParams = {
