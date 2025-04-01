@@ -26,9 +26,11 @@ class WebsocketClient {
         }
       };
 
-      this.ws.onclose = (event: CloseEvent) => {
+      this.ws.onclose = (event: CloseEvent) => {        
+        console.log(`Client is closed at: ${this.baseUrl + url}, Code: ${event.code}, Reason: ${event.reason}`)
         if (onClose) {
           onClose(event);
+          this.ws?.close()
         }
       };
 
@@ -123,7 +125,7 @@ class WebsocketConnectionManager {
   ): void {
     try {
       const client = this.getClient(url);
-      client.onMessage(callback);
+      client.onMessage(callback);      
     } catch (error) {
       console.error(`Error onMessage for ${url}`, error);
     }

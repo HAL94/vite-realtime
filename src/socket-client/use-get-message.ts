@@ -7,7 +7,7 @@ export default function useGetMessage<T>(
 ) {
   const [messageData, setMessageData] = useState<undefined | T>(undefined);
   useEffect(() => {
-    client.onMessage<T>(endpoint, (data) => setMessageData(data));
+    client.onMessage<T>(endpoint, (data) => setMessageData(data));    
   }, []);
 
   return { data: messageData, setData: setMessageData };
