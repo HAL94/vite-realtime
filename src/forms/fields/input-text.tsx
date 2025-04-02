@@ -1,3 +1,6 @@
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils";
 import React, { ComponentProps } from "react";
 import {
   Control,
@@ -28,10 +31,12 @@ export default function InputTextField<T extends FieldValues>({
   const controller = useController({ control, name });
   const { field } = controller;
   return (
-    <div className={className}>
-      <label htmlFor={name}>{label}</label>
-      <input {...field} {...props} onFocus={() => clearErrors(name)} />
-      {error}
+    <div className={"flex flex-col justify-center items-start"}>
+      <Label className="mb-2" htmlFor={name}>{label}</Label>
+      <Input {...field} {...props} onFocus={() => clearErrors(name)} className={cn(className)} />
+      {error && <div className="mb-3">
+        {error}
+      </div>}
     </div>
   );
 }
