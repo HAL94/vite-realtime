@@ -4,6 +4,7 @@
 
 type ApiEndpoints = {
   '/auth/login': { method: 'POST' };
+  '/auth/signout': { method: 'POST' };
   '/auth/signup': { method: 'POST' };
   '/auth/me': { method: 'GET' };
 };

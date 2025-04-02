@@ -1,8 +1,14 @@
 import LoginForm from "@/forms/login";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  beforeLoad: async ({ context }) => {
+    const userData = await context.verifyAuth();
+    if (userData.success) {
+      throw redirect({ to: "/leaderboard" });
+    }
+  },
 });
 
 function Index() {
