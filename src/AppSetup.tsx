@@ -3,13 +3,14 @@ import {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 import { setupInterceptors } from "./api-client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-function SetupAxiosInterceptors({ children }: PropsWithChildren) {  
+function SetupAxiosInterceptors({ children }: PropsWithChildren) {
   const hasRun = useRef(false);
-  const [done, setDone] = useState(false)
+  const [done, setDone] = useState(false);
 
   const intersecptorsSetup = useCallback(() => {
     setupInterceptors((statusCode: number) => {
@@ -20,13 +21,13 @@ function SetupAxiosInterceptors({ children }: PropsWithChildren) {
         // todo: call refresh endpoint or logout user
       }
     });
-}, []);
+  }, []);
 
-useEffect(() => {
+  useEffect(() => {
     if (!hasRun.current) {
-        // setting up should be done once only
+      // setting up should be done once only
       intersecptorsSetup();
-      setDone(true)
+      setDone(true);
       console.debug("Setup Done. This should only run once!");
       hasRun.current = true;
     }
@@ -37,6 +38,12 @@ useEffect(() => {
   return <>{children}</>;
 }
 
+const queryClient = new QueryClient();
+
 export default function AppSetup({ children }: PropsWithChildren) {
-  return <SetupAxiosInterceptors>{children}</SetupAxiosInterceptors>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SetupAxiosInterceptors>{children}</SetupAxiosInterceptors>      
+    </QueryClientProvider>
+  );
 }

@@ -3,26 +3,56 @@ import API from "../../api-client";
 import { POST } from "../../api-client/helpers";
 import { FormValues } from "./schema";
 
+type LoginSuccess = {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  token: string;
+};
+
+type AppResponse<T> = {
+  success: boolean;
+  data: T | null;
+  message: string;
+  statusCode?: number;
+};
+
+interface AppResponseError<T> {
+  response?: {
+    data: AppResponse<T>;
+  };
+}
+
 export const LoginMutKey = "Login";
-const defaultSubmit = (variables: FormValues) =>
-  API.post(POST("/auth/login"), { ...variables });
+const defaultSubmit = async (variables: FormValues) => {
+  const response = await API.post<AppResponse<LoginSuccess>>(
+    POST("/auth/login"),
+    variables
+  );
+  return response.data;
+};
 
 export default function useLogin({
   onSubmit,
 }: {
   onSubmit?: (formValues: FormValues) => Promise<any> | void;
-}) {
-  const { mutate, isPending, isError, error, isSuccess } = useMutation({
+} = {}) {
+  const { mutateAsync, isPending, data, isSuccess, error } = useMutation<
+    AppResponse<LoginSuccess>,
+    AppResponseError<null>,
+    FormValues
+  >({
     mutationKey: [LoginMutKey],
-    mutationFn: (variables: FormValues) =>
-      onSubmit?.(variables) ?? defaultSubmit(variables),
+    mutationFn: (data: FormValues) => onSubmit?.(data) ?? defaultSubmit(data),
   });
 
   return {
-    mutate,
-    isLoading: isPending,
-    isError,
-    error,
+    mutate: mutateAsync,
+    loading: isPending,
+    error: error?.response?.data?.message,
+    data,
     success: isSuccess,
   };
 }

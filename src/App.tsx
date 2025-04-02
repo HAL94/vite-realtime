@@ -36,7 +36,7 @@ function App() {
         {/* {scores &&
           scores.result.map((score, index) => <span key={index}>{score}</span>)} */}
       </div>
-      <LoginForm onSubmit={(data) => console.log("got data", data)} />
+      <LoginForm />
     </div>
   );
 }
