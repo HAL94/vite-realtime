@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import API from "../../api-client";
-import { POST } from "../../api-client/helpers";
+import API from "@/api-client";
+import { POST } from "@/api-client/helpers";
 import { FormValues } from "./schema";
+import { AppResponse, AppResponseError } from "@/types";
 
 type LoginSuccess = {
   user: {
@@ -12,18 +13,7 @@ type LoginSuccess = {
   token: string;
 };
 
-type AppResponse<T> = {
-  success: boolean;
-  data: T | null;
-  message: string;
-  statusCode?: number;
-};
 
-interface AppResponseError<T> {
-  response?: {
-    data: AppResponse<T>;
-  };
-}
 
 export const LoginMutKey = "Login";
 const defaultSubmit = async (variables: FormValues) => {
