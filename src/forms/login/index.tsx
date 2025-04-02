@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormValues, loginSchema } from "./schema";
 import InputTextField from "../fields/input-text";
 import { emailLabel, passwordLabel } from "./fields";
+import useLogin from "./hook";
 
 type Props = {
   onSubmit?: (formValues: FormValues) => void | Promise<void>;
@@ -17,12 +18,15 @@ export default function LoginForm({ onSubmit }: Props) {
     },
     mode: "onBlur",
   });
+  const { mutate: loginUser, loading, error, success } = useLogin();
 
-  const onHandleSubmit = (data: FormValues) => {
+  const onHandleSubmit = async (data: FormValues) => {
     if (onSubmit) {
-      onSubmit(data);
+      await onSubmit(data);
       return;
     }
+    const result = await loginUser(data);
+    console.log({ result })
   };
 
   const { errors } = form.formState;
@@ -55,8 +59,11 @@ export default function LoginForm({ onSubmit }: Props) {
             </>
           }
         />
-        <button type="submit">Submit</button>
+        <button type="submit">Submit</button>        
       </form>
+      {loading && <p>loading...</p>}
+      {error && <p>{error}</p>}
+      {success && <p>successfully logged in</p>}
     </FormProvider>
-  );
+  )
 }
