@@ -4,12 +4,22 @@ import { FormValues, loginSchema } from "./schema";
 import InputTextField from "../fields/input-text";
 import { emailLabel, passwordLabel } from "./fields";
 import useLogin from "./hook";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   onSubmit?: (formValues: FormValues) => void | Promise<void>;
+  onSuccess: () => void;
 };
 
-export default function LoginForm({ onSubmit }: Props) {
+export default function LoginForm({ onSubmit, onSuccess }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -26,44 +36,58 @@ export default function LoginForm({ onSubmit }: Props) {
       return;
     }
     const result = await loginUser(data);
-    console.log({ result })
+    if (result.success) {
+      onSuccess();
+    }
   };
 
   const { errors } = form.formState;
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onHandleSubmit)}>
-        <InputTextField
-          name="email"
-          control={form.control}
-          label={emailLabel}
-          error={
-            <>
-              {errors.email && (
-                <div className="text-red-500">{errors.email.message}</div>
-              )}
-            </>
-          }
-        />
-        <InputTextField
-          name="password"
-          type="password"
-          control={form.control}
-          label={passwordLabel}
-          error={
-            <>
-              {errors.password && (
-                <div className="text-red-500">{errors.password.message}</div>
-              )}
-            </>
-          }
-        />
-        <button type="submit">Submit</button>        
-      </form>
-      {loading && <p>loading...</p>}
-      {error && <p>{error}</p>}
-      {success && <p>successfully logged in</p>}
+      <Card className="min-w-lg">
+        <CardHeader>
+          <CardTitle>Login to leaderboards</CardTitle>
+          <CardDescription>Keep track of your achievements</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={form.handleSubmit(onHandleSubmit)}>
+            <InputTextField
+              name="email"
+              control={form.control}
+              label={emailLabel}
+              error={
+                <>
+                  {errors.email && (
+                    <div className="text-red-500">{errors.email.message}</div>
+                  )}
+                </>
+              }
+            />
+            <InputTextField
+              name="password"
+              type="password"
+              control={form.control}
+              label={passwordLabel}
+              error={
+                <>
+                  {errors.password && (
+                    <div className="text-red-500">
+                      {errors.password.message}
+                    </div>
+                  )}
+                </>
+              }
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </CardContent>
+        <CardFooter>
+          {loading && <p>loading...</p>}
+          {error && <p>{error}</p>}
+          {success && <p>successfully logged in</p>}
+        </CardFooter>
+      </Card>
     </FormProvider>
-  )
+  );
 }
