@@ -34,8 +34,8 @@ export default function useWebSocket<TReq = any, TRes = any>({
 
     // Clean up the WebSocket connection when the component unmounts
     return () => {
-      if (ws?.ws?.readyState === WebSocket.OPEN) {
-        ws?.close();
+      if (ws?.ws?.readyState === WebSocket.OPEN) {        
+        ConnectionFactory.disconnect(url)
       }
     };
   }, []);
