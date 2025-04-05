@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import SocketEndpoints from "./helpers";
 import { ConnectionFactory, WebsocketClient } from ".";
 
@@ -10,27 +10,21 @@ export default function useWebSocket<TReq = any, TRes = any>({
 }: WebsocketProps) {
   const [receivedData, setReceivedData] = useState<TRes | undefined>(undefined);
   const [messages, setMessages] = useState<TRes[]>([]);
-  const wsRef = useRef<WebsocketClient | undefined>(undefined);
+  const [ws] = useState<WebsocketClient | undefined>(() =>
+    ConnectionFactory.createAndConnectClient({ url })
+  );
 
   const sender = (data: TReq) => {
-    if (wsRef.current) {
-      wsRef.current.send(data);
+    if (ws) {
+      ws.send(data);
     } else {
       console.error("wsRef not initialized");
     }
   };
 
   useEffect(() => {
-    // Replace 'ws://your-websocket-endpoint' with your actual WebSocket URL
-    const ws = ConnectionFactory.createAndConnectClient(
-      url,
-      () => console.log("con opened"),
-      () => console.log("con closed")
-    );
-
-    ws.onMessage<TRes>((data) => {
+    ws?.onMessage<TRes>((data) => {
       try {
-        console.log("received data", data);
         setReceivedData(data);
         setMessages((prevMessages) => [...prevMessages, data]);
       } catch (error) {
@@ -38,19 +32,18 @@ export default function useWebSocket<TReq = any, TRes = any>({
       }
     });
 
-    wsRef.current = ws;
-
     // Clean up the WebSocket connection when the component unmounts
     return () => {
-      if (ws.ws?.readyState === WebSocket.OPEN) {
-        ws.close();
+      if (ws?.ws?.readyState === WebSocket.OPEN) {
+        ws?.close();
       }
     };
-  }, []); // Empty dependency array ensures this effect runs only once after the initial render
+  }, []);
 
   return {
     data: receivedData,
     messages,
     sendMessage: sender,
+    client: ws,
   };
 }
