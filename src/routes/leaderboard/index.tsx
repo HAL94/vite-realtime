@@ -22,9 +22,14 @@ function LeaderboardIndex() {
   >({ url: "/scores" });
 
   const { data: initialData } = useWebSocket<undefined, string>({ url: "/" });
+  const { data: initialData2 } = useWebSocket<undefined, string>({ url: "/" });
 
   useEffect(() => {
-    console.log(initialData);
+    console.log("second initial call", initialData2);    
+  }, [initialData2]);
+
+  useEffect(() => {
+    console.log('first initial call', initialData);    
   }, [initialData]);
 
   return (
