@@ -7,6 +7,7 @@ type ApiEndpoints = {
   '/auth/signout': { method: 'POST' };
   '/auth/signup': { method: 'POST' };
   '/auth/me': { method: 'GET' };
+  '/games': { method: 'GET' }
 };
 
 type PostEndpoints = keyof {
