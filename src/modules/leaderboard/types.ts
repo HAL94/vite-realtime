@@ -6,3 +6,9 @@ export type LeaderboardItem = {
   score: number;
   date: Date | string;
 };
+
+
+export type Channel = {
+  label: string
+  value: string
+}

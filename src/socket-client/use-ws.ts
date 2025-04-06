@@ -15,6 +15,7 @@ export default function useWebSocket<TReq = any, TRes = any>({
   );
 
   const sender = (data: TReq) => {
+    console.log("should be sending", data, typeof ws);
     if (ws) {
       ws.send(data);
     } else {
@@ -34,8 +35,8 @@ export default function useWebSocket<TReq = any, TRes = any>({
 
     // Clean up the WebSocket connection when the component unmounts
     return () => {
-      if (ws?.ws?.readyState === WebSocket.OPEN) {        
-        ConnectionFactory.disconnect(url)
+      if (ws?.ws?.readyState === WebSocket.OPEN) {
+        ConnectionFactory.disconnect(url);
       }
     };
   }, []);
