@@ -16,7 +16,8 @@ import { AxiosResponse } from "axios";
 
 const getGamesKey = "GetAllGames";
 export default function SelectGameChannels({
-  onChange
+  onChange,
+  defaultValue
 }: {
   onChange: (channel: Channel["value"]) => void;
   defaultValue?: string
@@ -44,7 +45,7 @@ export default function SelectGameChannels({
   }
 
   return (
-    <Select onValueChange={(value) => onChange(value)}>
+    <Select onValueChange={(value) => onChange(value)} defaultValue={defaultValue}>
       <SelectTrigger className="w-[180px] text-white">
         <SelectValue placeholder="Select Games" />
       </SelectTrigger>

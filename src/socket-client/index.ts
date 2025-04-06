@@ -241,7 +241,7 @@ class WebsocketConnectionManager {
    */
   createAndConnectClient(
     connectionConfig: ConnectionParams
-  ): WebsocketClient | undefined {
+  ): WebsocketClient {
     let client = this.getConnection(connectionConfig.url);
     if (!client) {
       client = this.connect(connectionConfig);
