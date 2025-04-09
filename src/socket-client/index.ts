@@ -153,7 +153,7 @@ export class WebsocketClient {
       return;
     }
 
-    if (this.ws.readyState === 1) {
+    if (this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(JSON.stringify(data));
     }
   }
