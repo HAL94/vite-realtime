@@ -1,8 +1,7 @@
 import SelectGameChannels from "@/modules/leaderboard/components/SelectGame";
 import { LeaderboardItem } from "@/modules/leaderboard/types";
-import useWebSocket, { ReadyState } from "@/socket-client/use-ws";
+import useWsFetch from "@/socket-client/use-ws-fetch";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import * as uuidv4 from "uuid";
 
 export const Route = createFileRoute("/leaderboard/")({
@@ -15,28 +14,27 @@ export const Route = createFileRoute("/leaderboard/")({
   },
 });
 
-function LeaderboardIndex() {
-  const [game, setGame] = useState('all')
-  const { data, sendMessage, state } = useWebSocket<
-    { game: string },
-    { result: LeaderboardItem[] }
-  >({ url: "/scores" });
+type ScoreSubmitRequest = {
+  game: string;
+};
 
-  useEffect(() => {
-    if (state && state === ReadyState.OPEN) {
-      sendMessage({ game });
-    }
-  }, [state, game]);
+type ScoreResponse = {
+  result: LeaderboardItem[];
+};
+
+function LeaderboardIndex() {
+  const { sendMessage, data } = useWsFetch<ScoreSubmitRequest, ScoreResponse>({
+    url: "/scores",
+    payload: { game: "all" },
+  });
 
   return (
     <div className="flex gap-3">
       <SelectGameChannels
         onChange={(value) => {
-          console.log("got value", value);
-          // sendMessage({ game: value });
-          setGame(value)
+          sendMessage({ game: value });
         }}
-        defaultValue={game}
+        defaultValue={"all"}
       />
       {data &&
         data.result.map((item, index) => (
