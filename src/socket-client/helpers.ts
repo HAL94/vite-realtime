@@ -1,6 +1,7 @@
+type Home = "/";
+type Stat = "/scores";
+type SubmitStat = "/add-score";
+type MyScore = "/my-score";
 
-export type Home = '/';
-export type Stat = '/scores';
-
-type SocketEndpoints = Home | Stat;
+type SocketEndpoints = Home | Stat | SubmitStat | MyScore;
 export default SocketEndpoints;
