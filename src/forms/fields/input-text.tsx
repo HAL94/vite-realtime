@@ -7,7 +7,6 @@ import {
   FieldValues,
   Path,
   useController,
-  useFormContext,
 } from "react-hook-form";
 
 type Props<TFieldValues extends FieldValues> = {
@@ -26,14 +25,12 @@ export default function InputTextField<T extends FieldValues>({
   className = "",
   ...props
 }: Props<T>) {
-  const form = useFormContext();
-  const { clearErrors } = form;
   const controller = useController({ control, name });
   const { field } = controller;
   return (
     <div className={"flex flex-col justify-center items-start"}>
       <Label className="mb-2" htmlFor={name}>{label}</Label>
-      <Input {...field} {...props} onFocus={() => clearErrors(name)} className={cn(className)} />
+      <Input {...field} {...props} className={cn(className)} />
       {error && <div className="mb-3">
         {error}
       </div>}

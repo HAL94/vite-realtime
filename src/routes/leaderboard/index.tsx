@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import AddScoreDialog from "@/modules/leaderboard/add-score/dialog";
 import SelectGameChannels from "@/modules/leaderboard/components/SelectGame";
 import { LeaderboardItem } from "@/modules/leaderboard/types";
 import useWsFetch from "@/socket-client/use-ws-fetch";
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/leaderboard/")({
   component: LeaderboardIndex,
   beforeLoad: async ({ context }) => {
     const userData = await context.verifyAuth();
+    console.log({ userData })
     if (!userData.success) {
       throw redirect({ to: "/" });
     }
@@ -30,16 +32,19 @@ function LeaderboardIndex() {
     payload: { game: "all" },
   });
 
-  const { sendMessage: addScore } = useWsFetch<number, string>({
-    url: "/add-score",
-    enabled: false,
-  });
+  // const { sendMessage: addScore } = useWsFetch<
+  //   { gameChannel: string; score: number },
+  //   string
+  // >({
+  //   url: "/add-score",
+  //   enabled: false,
+  // });
 
   const { sendMessage: sendFetchScore, data: receivedScore } = useWsFetch<
     string,
     LeaderboardItem
   >({
-    url: "/my-score"
+    url: "/my-score",
   });
 
   useEffect(() => {
@@ -54,13 +59,14 @@ function LeaderboardIndex() {
         }}
         defaultValue={"all"}
       />
-      <Button
+      <AddScoreDialog triggerCn="text-white self-start text-xs"/>
+      {/* <Button
         onClick={() => {
-          addScore(100);
+          addScore({ gameChannel: "cod", score: 100 });
         }}
       >
         Add score of 100
-      </Button>
+      </Button> */}
       <Button
         onClick={() => {
           sendFetchScore("cod");
