@@ -9,7 +9,11 @@ type Props = {
   onSuccess?: () => void;
 };
 
-export default function SubmitScoreForm({ onSubmit, onSuccess }: Props) {
+export default function SubmitScoreForm({
+  onSubmit,
+  onSuccess,
+  children,
+}: React.PropsWithChildren<Props>) {
   const form = useForm({
     resolver: zodResolver(submitFormSchema),
     defaultValues: {
@@ -18,8 +22,7 @@ export default function SubmitScoreForm({ onSubmit, onSuccess }: Props) {
     mode: "onBlur",
   });
 
-  const onHandleSubmit = async (data: FormValues) => {
-    console.log({ data })
+  const onHandleSubmit = async (data: FormValues) => {    
     if (onSubmit) {
       await onSubmit(data);
       return;
@@ -46,7 +49,7 @@ export default function SubmitScoreForm({ onSubmit, onSuccess }: Props) {
           }
         />
 
-        <Button>Add your score</Button>
+        {children ? children : <Button>Add your score</Button>}
       </form>
     </FormProvider>
   );

@@ -1,25 +1,18 @@
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import SubmitScoreForm from "@/forms/submit-score";
 import useWsFetch from "@/socket-client/use-ws-fetch";
-import { cn } from "@/utils";
-import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
 
-type Props = {
-  className?: string;
-  triggerCn?: string;
-};
-export default function AddScoreDialog({
-  className = "",
-  triggerCn = "",
-}: Props) {
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+export default function AddScoreDialog() {
   const { sendMessage: addScore } = useWsFetch<
     { gameChannel: string; score: number },
     string
@@ -29,24 +22,30 @@ export default function AddScoreDialog({
   });
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger className={cn("", triggerCn)}>Add</AlertDialogTrigger>
-      <AlertDialogContent className={cn("", className)}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Add your score</AlertDialogTitle>
-          <AlertDialogDescription>
-            Your glory shall not be lost!
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="text-white">
+          Add Score
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add/Update your score</DialogTitle>
+          <DialogDescription>
+            Make your score in Call of Duty game. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
         <SubmitScoreForm
           onSubmit={(formValue) => {
-            addScore({ gameChannel: "cod", score: formValue.score });
+            addScore({ gameChannel: "cod", score: formValue.score });            
+            // console.log("close button", document.querySelector("[data-slot]='dialog-close'"))
           }}
-        />
-        <AlertDialogFooter>
-          <AlertDialogCancel className="text-white">Cancel</AlertDialogCancel>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        >
+          <DialogClose className="text-white">
+            <Button type="submit">Add Score</Button>
+          </DialogClose>
+        </SubmitScoreForm>
+      </DialogContent>
+    </Dialog>
   );
 }
