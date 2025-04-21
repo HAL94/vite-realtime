@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { configureWsUnauthCallback, ConnectionFactory } from "./socket-client";
 import { AuthProvider, useAuth } from "./contexts/auth";
 
-function SetupAxiosInterceptors({ children }: PropsWithChildren) {
+function SetupInterceptors({ children }: PropsWithChildren) {
   const hasRun = useRef(false);
   const [done, setDone] = useState(false);
   const { setUserData } = useAuth();
@@ -53,7 +53,7 @@ export default function AppSetup({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <SetupAxiosInterceptors>{children}</SetupAxiosInterceptors>
+        <SetupInterceptors>{children}</SetupInterceptors>
       </AuthProvider>
     </QueryClientProvider>
   );
