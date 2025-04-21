@@ -1,3 +1,4 @@
+import { useAuth } from "@/contexts/auth";
 import AddScoreDialog from "@/modules/leaderboard/add-score/dialog";
 import SelectGameChannels from "@/modules/leaderboard/components/SelectGame";
 import { LeaderboardTable } from "@/modules/leaderboard/table";
@@ -9,7 +10,7 @@ export const Route = createFileRoute("/leaderboard/")({
   component: LeaderboardIndex,
   beforeLoad: async ({ context }) => {
     const userData = await context.verifyAuth();
-    console.log({ userData });
+    console.log({ userData })
     if (!userData.success) {
       throw redirect({ to: "/" });
     }
@@ -38,6 +39,8 @@ function LeaderboardIndex() {
     enabled: true,
   });
 
+  const { userData } = useAuth()
+
   return (
     <div className="flex flex-col gap-3 my-3 min-w-3xl">
       <div className="flex gap-2">
@@ -53,7 +56,7 @@ function LeaderboardIndex() {
         <LeaderboardTable
           data={data.result}
           userTopRank={receivedScore?.result}
-          userData={{ userId: 1 }}
+          userData={{ userId: userData?.id }}
         />
       )}
     </div>

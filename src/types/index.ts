@@ -5,8 +5,15 @@ export type AppResponse<T = null> = {
   statusCode?: number;
 };
 
-export type AppResponseError<T = null> = {
+export type AppResponseFail = {
+  success: false,
+  data: null,
+  message?: string;
+  statusCode?: number;
+}
+
+export type AppResponseError = {
   response?: {
-    data: AppResponse<T>;
+    data: AppResponseFail;
   };
 }

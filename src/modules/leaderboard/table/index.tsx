@@ -20,7 +20,7 @@ import LeaderboardRowItem from "./leaderboard-row-item";
 type Props = {
   data: LeaderboardItem[];
   userTopRank?: LeaderboardItem;
-  userData: { userId: number };
+  userData: { userId?: number };
 };
 
 export function LeaderboardTable({
@@ -82,8 +82,8 @@ export function LeaderboardTable({
               <LeaderboardRowItem
                 key={index}
                 item={item}
-                rank={index + 1}
-                highlightUserRow={userData.userId === item.id}
+                rank={item.rank}
+                highlightUserRow={userData.userId === item.userId}
               />
             ))}
           </TableBody>

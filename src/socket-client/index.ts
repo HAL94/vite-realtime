@@ -180,6 +180,9 @@ class WebsocketConnectionManager {
    */
   private connectionLocks: Map<string, boolean> = new Map();
 
+
+  static onUnauthCloseCallback: () => void;
+
   /**
    * @private
    * @method connect
@@ -215,6 +218,10 @@ class WebsocketConnectionManager {
     const onCloseWrapper = (event: CloseEvent) => {
       if (onClose) {
         onClose(event);
+      }
+
+      if (event.code === 1008) {
+        WebsocketConnectionManager.onUnauthCloseCallback()
       }
 
       this.connectionLocks.delete(url);
@@ -287,3 +294,8 @@ class WebsocketConnectionManager {
 }
 
 export const ConnectionFactory = new WebsocketConnectionManager();
+
+
+export const configureWsUnauthCallback = (callback: () => void) => {
+  WebsocketConnectionManager.onUnauthCloseCallback = callback;
+}

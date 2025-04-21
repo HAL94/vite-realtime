@@ -7,10 +7,13 @@ import {
 } from "react";
 import { setupInterceptors } from "./api-client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { configureWsUnauthCallback, ConnectionFactory } from "./socket-client";
+import { AuthProvider, useAuth } from "./contexts/auth";
 
 function SetupAxiosInterceptors({ children }: PropsWithChildren) {
   const hasRun = useRef(false);
   const [done, setDone] = useState(false);
+  const { setUserData } = useAuth();
 
   const intersecptorsSetup = useCallback(() => {
     setupInterceptors((statusCode: number) => {
@@ -19,8 +22,14 @@ function SetupAxiosInterceptors({ children }: PropsWithChildren) {
           `Got unauthorized request with statusCode: 401! Refresh token or logout user`
         );
         // todo: call refresh endpoint or logout user
+        ConnectionFactory.disconnectAll();
+        setUserData(undefined);
       }
     });
+    configureWsUnauthCallback(() => {
+      ConnectionFactory.disconnectAll();
+      setUserData(undefined);
+    })
   }, []);
 
   useEffect(() => {
@@ -43,7 +52,9 @@ const queryClient = new QueryClient();
 export default function AppSetup({ children }: PropsWithChildren) {
   return (
     <QueryClientProvider client={queryClient}>
-      <SetupAxiosInterceptors>{children}</SetupAxiosInterceptors>      
+      <AuthProvider>
+        <SetupAxiosInterceptors>{children}</SetupAxiosInterceptors>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

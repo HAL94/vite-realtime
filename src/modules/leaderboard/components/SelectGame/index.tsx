@@ -34,6 +34,10 @@ export default function SelectGameChannels({
       );
       return result.data;
     },
+    refetchOnWindowFocus: false,
+    refetchInterval: 0,
+    refetchOnMount: false,
+    refetchOnReconnect: false
   });
 
   if (isLoading) return <p>Loading...</p>;
