@@ -41,6 +41,8 @@ function LeaderboardIndex() {
 
   const { userData } = useAuth()
 
+  console.log({ leaderboard: data })
+
   return (
     <div className="flex flex-col gap-3 my-3 min-w-3xl">
       <div className="flex gap-2">
