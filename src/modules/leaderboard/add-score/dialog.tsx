@@ -3,7 +3,6 @@ import useWsFetch from "@/socket-client/use-ws-fetch";
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -11,15 +10,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import AddScoreDialogSubmitButton from "./dialog-submit-button";
+// import { useEffect, useState } from "react";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { delay } from "@/lib/utils";
 
 export default function AddScoreDialog() {
-  const { sendMessage: addScore } = useWsFetch<
+  const { sendMessage: addScore, data } = useWsFetch<
     { gameChannel: string; score: number },
-    string
+    { error: string }
   >({
     url: "/add-score",
     enabled: false,
   });
+  const [showError, setShowError] = useState<boolean>(true);
 
   return (
     <Dialog>
@@ -36,14 +41,25 @@ export default function AddScoreDialog() {
           </DialogDescription>
         </DialogHeader>
         <SubmitScoreForm
-          onSubmit={(formValue) => {
-            addScore({ gameChannel: "cod", score: formValue.score });            
-            // console.log("close button", document.querySelector("[data-slot]='dialog-close'"))
+          onSubmit={async (formValue) => {
+            console.log({ data: formValue });
+
+            setShowError(false);
+
+            addScore({
+              gameChannel: formValue.gameChannel,
+              score: formValue.score,
+            });
+
+            await delay(300)
+
+            setShowError(true);
           }}
         >
-          <DialogClose className="text-white">
-            <Button type="submit">Add Score</Button>
-          </DialogClose>
+          <AddScoreDialogSubmitButton />
+          {data?.error && showError && (
+            <Label className="text-red-500">{data?.error}</Label>
+          )}
         </SubmitScoreForm>
       </DialogContent>
     </Dialog>

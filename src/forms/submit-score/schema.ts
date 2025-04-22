@@ -8,6 +8,7 @@ export const submitFormSchema = z.object({
     })
     .nonnegative("Cannot have negative numbers")
     .min(1, { message: "Score field must be 1 or greater" }),
+  gameChannel: z.string({ message: "Game is required"}),
 });
 
 export type FormValues = z.infer<typeof submitFormSchema>;
