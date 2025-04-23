@@ -1,4 +1,5 @@
-import SignoutButton from "@/components/SignoutButton";
+// import SignoutButton from "@/components/SignoutButton";
+import LeaderboardHeader from "@/modules/leaderboard/header";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/leaderboard")({
@@ -7,15 +8,10 @@ export const Route = createFileRoute("/leaderboard")({
 
 function RouteComponent() {
   return (
-    <div className="p-2">
-      <span>
-        Header
-        <SignoutButton />
-      </span>
-      <div>
-        <Outlet />
-      </div>
-      <span>Footer</span>
+    <div className="p-2 h-screen flex flex-col">
+      <LeaderboardHeader />
+
+      <Outlet />
     </div>
   );
 }
