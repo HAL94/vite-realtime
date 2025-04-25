@@ -20,7 +20,12 @@ export function LeaderboardPagination({
     <Pagination>
       <PaginationContent>
         <PaginationItem className="cursor-pointer">
-          <PaginationPrevious />
+          <PaginationPrevious
+            onClick={() => {
+              if (currentPage === 1) return;
+              return onUpdatePage(currentPage - 1);
+            }}
+          />
         </PaginationItem>
 
         {Array.from({ length: totalPages }).map((_, page) => (
@@ -35,7 +40,14 @@ export function LeaderboardPagination({
         ))}
 
         <PaginationItem className="cursor-pointer">
-          <PaginationNext />
+          <PaginationNext            
+            onClick={() => {
+                console.log({ currentPage, totalPages })
+                if (currentPage < totalPages) {
+                    onUpdatePage(currentPage + 1);
+                }
+            }}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

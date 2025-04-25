@@ -51,7 +51,10 @@ function LeaderboardIndex() {
     <div className="flex flex-col gap-3 my-3 min-w-3xl">
       <div className="flex gap-2">
         <SelectGameChannels
-          onChange={(value) => setGame(value)}
+          onChange={(value) => {
+            setGame(value);
+            setPage(1);
+          }}
           defaultValue={game}
         />
         <AddScoreDialog />
@@ -72,8 +75,10 @@ function LeaderboardIndex() {
               end,
             });
           }}
+          pageSize={limit}
           onPageSizeChange={(newLimit) => {
             setLimit(newLimit);
+            setPage(1);
           }}
         />
       )}
