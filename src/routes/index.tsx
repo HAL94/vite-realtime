@@ -1,23 +1,23 @@
+import { useAuth } from "@/contexts/auth";
 import LoginForm from "@/forms/login";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
   beforeLoad: async ({ context }) => {
-    const userData = await context.verifyAuth();
-    if (userData.success) {
+    if (context.isAuth) {
       throw redirect({ to: "/leaderboard" });
     }
   },
 });
 
 function Index() {
-  const navigate = useNavigate();
+  const { setUserData } = useAuth();
   return (
     <div className="p-2">
       <LoginForm
-        onSuccess={() => {
-          navigate({ to: "/leaderboard" });
+        onSuccess={async (data) => {
+          setUserData(data.user);
         }}
       />
     </div>

@@ -13,10 +13,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LoginSuccess } from "./types";
 
 type Props = {
   onSubmit?: (formValues: FormValues) => void | Promise<void>;
-  onSuccess: () => void;
+  onSuccess: (data: LoginSuccess) => void;
 };
 
 export default function LoginForm({ onSubmit, onSuccess }: Props) {
@@ -37,7 +38,7 @@ export default function LoginForm({ onSubmit, onSuccess }: Props) {
     }
     const result = await loginUser(data);
     if (result.success) {
-      onSuccess();
+      onSuccess(result.data);
     }
   };
 

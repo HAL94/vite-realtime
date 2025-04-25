@@ -4,17 +4,10 @@ import SelectGameChannels from "@/modules/leaderboard/components/SelectGame";
 import { LeaderboardTable } from "@/modules/leaderboard/table";
 import { LeaderboardItem } from "@/modules/leaderboard/types";
 import useWsFetch from "@/socket-client/use-ws-fetch";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/leaderboard/")({
-  component: LeaderboardIndex,
-  beforeLoad: async ({ context }) => {
-    const userData = await context.verifyAuth();
-    console.log({ userData })
-    if (!userData.success) {
-      throw redirect({ to: "/" });
-    }
-  },
+  component: LeaderboardIndex
 });
 
 type ScoreSubmitRequest = {
@@ -39,9 +32,9 @@ function LeaderboardIndex() {
     enabled: true,
   });
 
-  const { userData } = useAuth()
+  const { userData } = useAuth();
 
-  console.log({ leaderboard: data })
+  console.log({ leaderboard: data });
 
   return (
     <div className="flex flex-col gap-3 my-3 min-w-3xl">

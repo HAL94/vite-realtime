@@ -1,7 +1,5 @@
-import {
-  Menubar,
-  MenubarMenu,
-} from "@/components/ui/menubar";
+import SignoutButton from "@/components/SignoutButton";
+import { Menubar, MenubarMenu } from "@/components/ui/menubar";
 import { Separator } from "@radix-ui/react-select";
 import { Link } from "@tanstack/react-router";
 
@@ -18,6 +16,9 @@ export default function LeaderboardHeader() {
           <Link to="/" className={linkStyle}>
             Profile
           </Link>
+        </div>
+        <div className="ml-auto">
+          <SignoutButton />
         </div>
       </MenubarMenu>
     </Menubar>
