@@ -31,6 +31,7 @@ type Props = {
   currentPage: number;
   onUpdatePage: (page: number) => void;
   onPageSizeChange: (newLimit: number) => void;
+  pageSize: number
 };
 
 export function LeaderboardTable({
@@ -39,6 +40,7 @@ export function LeaderboardTable({
   userData,
   totalPages,
   currentPage,
+  pageSize,
   onUpdatePage,
   onPageSizeChange,
 }: React.PropsWithChildren<Props>) {
@@ -58,7 +60,7 @@ export function LeaderboardTable({
             <Select
               onValueChange={(value) => onPageSizeChange(parseInt(value))}
             >
-              <SelectTrigger>Size</SelectTrigger>
+              <SelectTrigger className="text-white">{pageSize ? `Size: ${pageSize}` : "Select Size"}</SelectTrigger>
               <SelectContent>
                 {[
                   { label: 2, value: 2 },
