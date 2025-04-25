@@ -1,6 +1,14 @@
 import { checkAuth, type GetUserSuccess } from "@/lib/check-auth";
 import { AppResponse, AppResponseFail } from "@/types";
-import { createContext, PropsWithChildren, useCallback, useContext, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export interface AuthContext {
   verifyAuth: () => Promise<AppResponse<GetUserSuccess> | AppResponseFail>;
@@ -8,6 +16,7 @@ export interface AuthContext {
   setUserData:
     | React.Dispatch<React.SetStateAction<GetUserSuccess | undefined>>
     | (() => void);
+  isAuth: boolean;
 }
 
 const AuthContextMaker = createContext<undefined | AuthContext>(undefined);
@@ -35,11 +44,27 @@ export function AuthProvider({ children }: PropsWithChildren) {
     return userData;
   }, []);
 
+  const { isLoading, data } = useQuery({
+    queryKey: ["GetUser"],
+    queryFn: checkAuth,
+  });
+
+  useEffect(() => {
+    if (data?.success && data.data) {
+      setUserData(data.data);
+    }
+  }, [data]);
+
   return (
     <AuthContextMaker.Provider
-      value={{ verifyAuth: getUser, userData, setUserData }}
+      value={{
+        verifyAuth: getUser,
+        userData,
+        setUserData,
+        isAuth: Boolean(userData),
+      }}
     >
-      {children}
+      {isLoading ? null : children}
     </AuthContextMaker.Provider>
   );
 }

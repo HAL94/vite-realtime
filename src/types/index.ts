@@ -1,6 +1,6 @@
-export type AppResponse<T = null> = {
+export type AppResponse<T> = {
   success: boolean;
-  data: T | null;
+  data: T;
   message?: string;
   statusCode?: number;
 };

@@ -6,7 +6,10 @@ import {
   useState,
 } from "react";
 import { setupInterceptors } from "./api-client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider
+} from "@tanstack/react-query";
 import { configureWsUnauthCallback, ConnectionFactory } from "./socket-client";
 import { AuthProvider, useAuth } from "./contexts/auth";
 
@@ -29,7 +32,7 @@ function SetupInterceptors({ children }: PropsWithChildren) {
     configureWsUnauthCallback(() => {
       ConnectionFactory.disconnectAll();
       setUserData(undefined);
-    })
+    });
   }, []);
 
   useEffect(() => {

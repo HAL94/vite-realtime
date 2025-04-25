@@ -4,6 +4,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { useAuth } from "./contexts/auth";
+import { useEffect } from "react";
 
 // Create a new router instance
 const router = createRouter({
@@ -12,6 +13,7 @@ const router = createRouter({
     verifyAuth: undefined!,
     userData: undefined!,
     setUserData: () => {},
+    isAuth: undefined!
   },
 });
 
@@ -24,10 +26,13 @@ declare module "@tanstack/react-router" {
 
 function App() {
   const authContext = useAuth();
+  useEffect(() => {
+    router.invalidate();
+  }, [authContext.isAuth])
   return (
     <RouterProvider
       router={router}
-      context={{ verifyAuth: authContext.verifyAuth }}
+      context={{ ...authContext }}
     />
   );
 }

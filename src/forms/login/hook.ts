@@ -2,17 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import API from "@/api-client";
 import { POST } from "@/api-client/helpers";
 import { FormValues } from "./schema";
-import { AppResponse, AppResponseError } from "@/types";
-
-type LoginSuccess = {
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
-  token: string;
-};
-
+import { AppResponse, AppResponseFail } from "@/types";
+import { LoginSuccess } from "./types";
 
 
 export const LoginMutKey = "Login";
@@ -31,7 +22,7 @@ export default function useLogin({
 } = {}) {
   const { mutateAsync, isPending, data, isSuccess, error } = useMutation<
     AppResponse<LoginSuccess>,
-    AppResponseError<null>,
+    AppResponseFail,
     FormValues
   >({
     mutationKey: [LoginMutKey],
@@ -41,7 +32,7 @@ export default function useLogin({
   return {
     mutate: mutateAsync,
     loading: isPending,
-    error: error?.response?.data?.message,
+    error: error?.message,
     data,
     success: isSuccess,
   };

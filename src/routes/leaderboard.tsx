@@ -1,9 +1,14 @@
 // import SignoutButton from "@/components/SignoutButton";
 import LeaderboardHeader from "@/modules/leaderboard/header";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/leaderboard")({
   component: RouteComponent,
+  beforeLoad: async ({ context }) => {    
+    if (!context.isAuth) {
+      throw redirect({ to: "/" });
+    }
+  },
 });
 
 function RouteComponent() {
