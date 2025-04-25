@@ -5,6 +5,7 @@ import InputTextField from "../fields/input-text";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import InputSelectGames from "../fields/input-select-games";
+import { gameLabel, scoreLabel } from "./fields";
 
 type Props = {
   onSubmit?: (formValues: FormValues) => void | Promise<void>;
@@ -20,7 +21,7 @@ export default function SubmitScoreForm({
     resolver: zodResolver(submitFormSchema),
     defaultValues: {
       score: undefined,
-      gameChannel: undefined
+      gameChannel: undefined,
     },
     mode: "onChange",
   });
@@ -45,7 +46,7 @@ export default function SubmitScoreForm({
         <InputTextField
           control={form.control}
           name="score"
-          label={"Score"}
+          label={scoreLabel}
           error={
             <>
               {errors.score && (
@@ -54,8 +55,11 @@ export default function SubmitScoreForm({
             </>
           }
         />
-        <InputSelectGames control={form.control} name="gameChannel" />
-
+        <InputSelectGames
+          control={form.control}
+          name="gameChannel"
+          label={gameLabel}
+        />
         {children ? children : <Button>Add your score</Button>}
       </form>
     </Form>

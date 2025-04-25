@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 
 import { Control, FieldValues, Path } from "react-hook-form";
+import { SelectOption } from "../types";
 
 type Props<TFieldValues extends FieldValues> = {
   control: Control<TFieldValues>;
@@ -21,10 +22,7 @@ type Props<TFieldValues extends FieldValues> = {
   label: string;
   className?: string;
   description?: string;
-  options: {
-    label: string;
-    value: string;
-  }[];
+  options: SelectOption[];
 };
 
 export default function InputSelectField<T extends FieldValues>({
@@ -45,7 +43,10 @@ export default function InputSelectField<T extends FieldValues>({
             <FormControl>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className={className} iconClassName={className}>
+                  <SelectTrigger
+                    className={className}
+                    iconClassName={className}
+                  >
                     <SelectValue placeholder={label} />
                   </SelectTrigger>
                 </FormControl>

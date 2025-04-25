@@ -5,7 +5,7 @@ import { AppResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 
-const getGamesKey = "GetAllGames";
+export const getGamesKey = "GetAllGames";
 export default function useGetGamesQuery({
   excludeGame,
 }: {
