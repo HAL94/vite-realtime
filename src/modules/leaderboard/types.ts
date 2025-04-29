@@ -7,8 +7,13 @@ export type LeaderboardItem = {
   date: Date | string;
 };
 
-
 export type Channel = {
-  label: string
-  value: string
-}
+  label: string;
+  value: string;
+};
+
+export type StatItem = {
+  name: string;
+  score: number;
+  games: number;
+};

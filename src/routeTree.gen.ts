@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LeaderboardImport } from './routes/leaderboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as LeaderboardIndexImport } from './routes/leaderboard/index'
+import { Route as LeaderboardTopReportsImport } from './routes/leaderboard/top-reports'
 
 // Create/Update Routes
 
@@ -35,6 +36,12 @@ const LeaderboardIndexRoute = LeaderboardIndexImport.update({
   getParentRoute: () => LeaderboardRoute,
 } as any)
 
+const LeaderboardTopReportsRoute = LeaderboardTopReportsImport.update({
+  id: '/top-reports',
+  path: '/top-reports',
+  getParentRoute: () => LeaderboardRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -53,6 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaderboardImport
       parentRoute: typeof rootRoute
     }
+    '/leaderboard/top-reports': {
+      id: '/leaderboard/top-reports'
+      path: '/top-reports'
+      fullPath: '/leaderboard/top-reports'
+      preLoaderRoute: typeof LeaderboardTopReportsImport
+      parentRoute: typeof LeaderboardImport
+    }
     '/leaderboard/': {
       id: '/leaderboard/'
       path: '/'
@@ -66,10 +80,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface LeaderboardRouteChildren {
+  LeaderboardTopReportsRoute: typeof LeaderboardTopReportsRoute
   LeaderboardIndexRoute: typeof LeaderboardIndexRoute
 }
 
 const LeaderboardRouteChildren: LeaderboardRouteChildren = {
+  LeaderboardTopReportsRoute: LeaderboardTopReportsRoute,
   LeaderboardIndexRoute: LeaderboardIndexRoute,
 }
 
@@ -80,11 +96,13 @@ const LeaderboardRouteWithChildren = LeaderboardRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRouteWithChildren
+  '/leaderboard/top-reports': typeof LeaderboardTopReportsRoute
   '/leaderboard/': typeof LeaderboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/leaderboard/top-reports': typeof LeaderboardTopReportsRoute
   '/leaderboard': typeof LeaderboardIndexRoute
 }
 
@@ -92,15 +110,21 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRouteWithChildren
+  '/leaderboard/top-reports': typeof LeaderboardTopReportsRoute
   '/leaderboard/': typeof LeaderboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/leaderboard' | '/leaderboard/'
+  fullPaths: '/' | '/leaderboard' | '/leaderboard/top-reports' | '/leaderboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/leaderboard'
-  id: '__root__' | '/' | '/leaderboard' | '/leaderboard/'
+  to: '/' | '/leaderboard/top-reports' | '/leaderboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/leaderboard'
+    | '/leaderboard/top-reports'
+    | '/leaderboard/'
   fileRoutesById: FileRoutesById
 }
 
@@ -134,8 +158,13 @@ export const routeTree = rootRoute
     "/leaderboard": {
       "filePath": "leaderboard.tsx",
       "children": [
+        "/leaderboard/top-reports",
         "/leaderboard/"
       ]
+    },
+    "/leaderboard/top-reports": {
+      "filePath": "leaderboard/top-reports.tsx",
+      "parent": "/leaderboard"
     },
     "/leaderboard/": {
       "filePath": "leaderboard/index.tsx",
