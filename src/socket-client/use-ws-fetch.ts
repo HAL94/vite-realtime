@@ -37,7 +37,7 @@ export default function useWsFetch<TReq = any, TRes = any>(
   const { payload } = sendProps;
 
   useEffect(() => {
-    if (state && state === 'OPEN' && enabled && payload) {
+    if (state && state === "OPEN" && enabled && payload) {
       sender(payload);
     }
   }, [state, ...deps]);
@@ -52,14 +52,18 @@ export default function useWsFetch<TReq = any, TRes = any>(
         console.error("receving failed:", error);
       }
     });
+  }, []);
 
-    // Clean up the WebSocket connection when the component unmounts
+  useEffect(() => {
+    console.log({ state });
     return () => {
-      if (state === 'OPEN') {
+      console.log("Running cleanup of ws hook", { state })
+      if (state === "OPEN") {
+        console.log("Should only run on Unmount")
         ConnectionFactory.disconnect(url);
       }
     };
-  }, []);
+  }, [state]);
 
   return {
     ...clientProps,

@@ -6,7 +6,6 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -49,11 +48,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
     queryFn: checkAuth,
   });
 
-  useEffect(() => {
-    if (data?.success && data.data) {
-      setUserData(data.data);
-    }
-  }, [data]);
+  if (data?.success && data.data && typeof userData === 'undefined') {
+    setUserData(data.data);
+  }
 
   return (
     <AuthContextMaker.Provider

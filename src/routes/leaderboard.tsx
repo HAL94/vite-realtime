@@ -15,7 +15,6 @@ function RouteComponent() {
   return (
     <div className="p-2 h-screen flex flex-col">
       <LeaderboardHeader />
-
       <Outlet />
     </div>
   );
