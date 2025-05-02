@@ -24,7 +24,7 @@ type ScoreResponse = {
 
 function LeaderboardIndex() {
   const [game, setGame] = useState("all");
-  const [limit, setLimit] = useState(3);
+  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const calcPagination = () => {
     const start = (page - 1) * limit;

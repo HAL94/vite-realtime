@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/auth";
 import LoginForm from "@/forms/login";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -20,6 +20,9 @@ function Index() {
           setUserData(data.user);
         }}
       />
+      <p>
+        Dont have an account? <Link to="/signup">Create an account</Link>
+      </p>
     </div>
   );
 }

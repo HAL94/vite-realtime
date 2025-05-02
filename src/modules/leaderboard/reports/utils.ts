@@ -11,7 +11,7 @@ export function getStartAndEndDates(value: string) {
     // Then, go back one day to get the last day of the current month
     const endDate = new Date(nextMonthFirstDay.getTime() - 24 * 60 * 60 * 1000);
 
-    const periodDate = { start: startDate, end: endDate, limit: 5 };
+    const periodDate = { start: startDate, end: endDate, limit: 15 };
 
     return periodDate;
   } catch (error) {
