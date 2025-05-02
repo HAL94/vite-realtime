@@ -11,12 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
 import { Route as LeaderboardImport } from './routes/leaderboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as LeaderboardIndexImport } from './routes/leaderboard/index'
 import { Route as LeaderboardTopReportsImport } from './routes/leaderboard/top-reports'
 
 // Create/Update Routes
+
+const SignupRoute = SignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LeaderboardRoute = LeaderboardImport.update({
   id: '/leaderboard',
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LeaderboardImport
       parentRoute: typeof rootRoute
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
+      parentRoute: typeof rootRoute
+    }
     '/leaderboard/top-reports': {
       id: '/leaderboard/top-reports'
       path: '/top-reports'
@@ -96,12 +110,14 @@ const LeaderboardRouteWithChildren = LeaderboardRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRouteWithChildren
+  '/signup': typeof SignupRoute
   '/leaderboard/top-reports': typeof LeaderboardTopReportsRoute
   '/leaderboard/': typeof LeaderboardIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/signup': typeof SignupRoute
   '/leaderboard/top-reports': typeof LeaderboardTopReportsRoute
   '/leaderboard': typeof LeaderboardIndexRoute
 }
@@ -110,19 +126,26 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/leaderboard': typeof LeaderboardRouteWithChildren
+  '/signup': typeof SignupRoute
   '/leaderboard/top-reports': typeof LeaderboardTopReportsRoute
   '/leaderboard/': typeof LeaderboardIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/leaderboard' | '/leaderboard/top-reports' | '/leaderboard/'
+  fullPaths:
+    | '/'
+    | '/leaderboard'
+    | '/signup'
+    | '/leaderboard/top-reports'
+    | '/leaderboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/leaderboard/top-reports' | '/leaderboard'
+  to: '/' | '/signup' | '/leaderboard/top-reports' | '/leaderboard'
   id:
     | '__root__'
     | '/'
     | '/leaderboard'
+    | '/signup'
     | '/leaderboard/top-reports'
     | '/leaderboard/'
   fileRoutesById: FileRoutesById
@@ -131,11 +154,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LeaderboardRoute: typeof LeaderboardRouteWithChildren
+  SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LeaderboardRoute: LeaderboardRouteWithChildren,
+  SignupRoute: SignupRoute,
 }
 
 export const routeTree = rootRoute
@@ -149,7 +174,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/leaderboard"
+        "/leaderboard",
+        "/signup"
       ]
     },
     "/": {
@@ -161,6 +187,9 @@ export const routeTree = rootRoute
         "/leaderboard/top-reports",
         "/leaderboard/"
       ]
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/leaderboard/top-reports": {
       "filePath": "leaderboard/top-reports.tsx",
