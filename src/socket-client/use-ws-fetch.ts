@@ -55,11 +55,8 @@ export default function useWsFetch<TReq = any, TRes = any>(
   }, []);
 
   useEffect(() => {
-    console.log({ state });
     return () => {
-      console.log("Running cleanup of ws hook", { state })
       if (state === "OPEN") {
-        console.log("Should only run on Unmount")
         ConnectionFactory.disconnect(url);
       }
     };
