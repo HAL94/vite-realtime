@@ -24,8 +24,8 @@ export default function StatsContainer({
 
       <CardContent>
         <div className="space-y-4">
-          {statList.map((player, i) => (
-            <PlayerStat key={i} stat={player} />
+          {statList.map((stat, i) => (
+            <PlayerStat key={i} stat={stat} />
           ))}
         </div>
       </CardContent>

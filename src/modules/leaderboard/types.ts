@@ -16,4 +16,6 @@ export type StatItem = {
   name: string;
   score: number;
   games: number;
+  game: string;
+  date: string;
 };

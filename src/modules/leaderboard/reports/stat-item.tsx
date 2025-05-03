@@ -13,8 +13,10 @@ export default function PlayerStat({ stat }: { stat: StatItem }) {
           </div>
         </div>
         <div className="text-right">
-          <div className="font-bold">{stat.score.toLocaleString()}</div>
           <div className="text-sm text-muted-foreground">Score</div>
+          <div className="font-bold">{stat.score.toLocaleString()}</div>
+          <div className="text-xs text-muted-foreground">{stat.game}</div>
+          <div className="text-xs text-muted-foreground">{stat.date}</div>
         </div>
       </div>
     </div>
